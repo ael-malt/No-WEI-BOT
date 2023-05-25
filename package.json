@@ -1,0 +1,22 @@
+{
+	"name": "no-wei-bot",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node index.js",
+		"server": "nodemon index.js"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@notionhq/client": "^2.2.5",
+		"discord.js": "^14.11.0",
+		"dotenv": "^16.0.3",
+		"mongoose": "^7.2.1",
+		"nodemon": "^2.0.22",
+		"wokcommands": "^2.1.6"
+	}
+}
