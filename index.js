@@ -6,7 +6,6 @@ require("dotenv/config");
 
 const dotenv = require("dotenv");
 dotenv.config();
-const UpdateChannel = "905417166906613780";
 
 const client = new Client({
 	intents: [
@@ -28,7 +27,6 @@ client.on("ready", () => {
 		testServers: ["911220781298630676"],
 		mongoUri: process.env.MONGO_URI,
 	});
-	client.channels.cache.get(UpdateChannel);
 });
 
 client.login(process.env.DISCORD_TOKEN);

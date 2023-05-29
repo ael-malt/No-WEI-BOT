@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const { Client, APIErrorCode } = require("@notionhq/client");
-// const UL_Schema = require("../schemas/notion-projects-schema");
+const UL_Schema = require("../schemas/updatelists-schema");
 
 module.exports = async (instance, client) => {
 	const Guild = client.guilds.cache.get("911220781298630676"); // Server Id
@@ -13,15 +13,6 @@ module.exports = async (instance, client) => {
 
 	async function notionProjectNotif() {
 	try {
-		// const response = await notion.search({
-		// 	query: 'No WEI Back',
-		// });
-		// console.log(response.results[0]);
-
-
-		// const pageId = 'aa386400-6a1f-456f-a5ea-b0ad7c115b0e';
-		// const response = await notion.pages.retrieve({ page_id: pageId });
-		// console.log(response.properties.title);
 		const blockId = 'aa386400-6a1f-456f-a5ea-b0ad7c115b0e';
 		const response = await notion.blocks.children.list({
 		  block_id: blockId,
@@ -48,32 +39,25 @@ module.exports = async (instance, client) => {
 			}
 			i++;
 		}
-		console.log(message);
+		// console.log(message);
 
-		// const myPage = await notion.databases.query({
-		// database_id: databaseId,
-		// });
-		// console.log(myPage.results[0]);
 
-		// for (let i = 0; i < myPage.results.length; i++) {
-		// //Check for existing entries
-		// const existingEntries = await UL_Schema.find({
-		// 	object: myPage.results[i].object,
-		// 	id: myPage.results[i].id,
-		// 	created_time: myPage.results[i].created_time,
-		// 	url: myPage.results[i].url,
+		// Check for existing entries
+		// const existingEntry = await UL_Schema.find({
 		// });
+		// console.log (existingEntry)
+		// Send Message
+		var msg = await targetChannel.send({ content: message });
+
 
 		// //If new entry found, add to MongoDB and send Discord message
-		// if (existingEntries[0] === undefined) {
-		// 	//Adding MongoDB entry
-		// 	await new UL_Schema({
-		// 	object: myPage.results[i].object,
-		// 	id: myPage.results[i].id,
-		// 	created_time: myPage.results[i].created_time,
-		// 	url: myPage.results[i].url,
-		// 	}).save();
-
+		// if (existingEntry[0] === undefined) {
+			//Adding MongoDB entry
+			await new UL_Schema({
+			text: message,
+			messageId: msg.id,
+			}).save();
+		// }
 		// 	//Get Answers
 
 		// 	const pageInfo = myPage.results[i].properties;
@@ -132,7 +116,6 @@ module.exports = async (instance, client) => {
 		// 		value: Budget,
 		// 		}
 		// 	);
-			targetChannel.send({ content: message });
 		// }
 		// }
 	} catch (error) {
