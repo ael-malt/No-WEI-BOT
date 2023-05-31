@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const { Client, APIErrorCode } = require("@notionhq/client");
-const UL_Schema = require("../schemas/updatelists-schema");
+const UL_Schema = require("../schemas/update-list-schema");
 
 module.exports = async (instance, client) => {
 	const Guild = client.guilds.cache.get("911220781298630676"); // Server Id
@@ -8,8 +8,6 @@ module.exports = async (instance, client) => {
 	const notion = new Client({
 		auth: process.env.NOTION_TOKEN,
 	});
-	const databaseId = 'aa3864006a1f456fa5eab0ad7c115b0e';
-	
 
 	async function notionProjectNotif() {
 	try {
@@ -18,45 +16,64 @@ module.exports = async (instance, client) => {
 		  block_id: blockId,
 		  page_size: 50,
 		});
-		console.log(response.results[2].to_do);
+		const listEmbed = new Discord.EmbedBuilder();
+		// console.log(response.results[2].to_do);
 		let i = 0;
+		j = 0;
 		let message = '';
-		let emoji = ''
+		let emoji = '';
+		let names = [];
+		let values = [];
+		names[0] = 'To-do'
+		values[0] = ''
 		while (response.results[i]) {
 			if (response.results[i].heading_1)
+			{
+				listEmbed.setTitle(response.results[0].heading_1.rich_text[0].text.content)
 				message += `# __${response.results[0].heading_1.rich_text[0].text.content}__\n`;
+			}
 			else if (response.results[i].heading_3)
+			{
+				j++;
+				names[j] = response.results[i].heading_3.rich_text[0].text.content
+				values[j] = ''
 				message += `### __${response.results[i].heading_3.rich_text[0].text.content}__\n`;
+			}
 			else if (response.results[i].divider)
 				 ;
-			else if (response.results[i].to_do)
+			else if (response.results[i].to_do.rich_text[0].text.content)
 			{
 				if (response.results[i].to_do.checked == false)
 					emoji = '🇽'
 				else
 					emoji = '✅'
+				values[j] += `${emoji} - ${response.results[i].to_do.rich_text[0].text.content}\n`
 				message += `${emoji} - ${response.results[i].to_do.rich_text[0].text.content}\n`
 			}
 			i++;
 		}
-		// console.log(message);
-
-
+		j = 0;
+		while (names[j]) {
+			listEmbed.addFields({name: names[j], value: values[j]});
+			j++;
+		}
+		const today = new Date();
+		listEmbed.setFooter({text: `🕛 Updated ${today.getUTCHours() + 2}:${today.getUTCMinutes()}`})
 		// Check for existing entries
-		// const existingEntry = await UL_Schema.find({
-		// });
-		// console.log (existingEntry)
+		const existingEntry = await UL_Schema.find({
+		});
+		console.log (existingEntry)
 		// Send Message
-		var msg = await targetChannel.send({ content: message });
+		var msg = await targetChannel.send({ embeds: [listEmbed] });
 
 
 		// //If new entry found, add to MongoDB and send Discord message
 		// if (existingEntry[0] === undefined) {
 			//Adding MongoDB entry
-			await new UL_Schema({
-			text: message,
-			messageId: msg.id,
-			}).save();
+			// await new UL_Schema({
+			// text: "test",
+			// messageId: "test",
+			// }).save();
 		// }
 		// 	//Get Answers
 

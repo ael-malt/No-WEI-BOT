@@ -22,10 +22,10 @@ client.on("ready", () => {
 	client.user.setActivity('your towels', { type: "WATCHING" });
 	new WOK({
 		client,
+		mongoUri: process.env.MONGO_URI,
 		commandsDir: path.join(__dirname, "commands"),
 		featuresDir: path.join(__dirname, "features"),
 		testServers: ["911220781298630676"],
-		mongoUri: process.env.MONGO_URI,
 	});
 });
 

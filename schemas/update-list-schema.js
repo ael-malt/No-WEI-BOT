@@ -4,8 +4,8 @@ const UL_Schema = new mongoose.Schema({
   title: String,
   messageId: String,
 });
-module.exports = mongoose.model("updatelists", UL_Schema);
+module.exports = mongoose.model("update-list", UL_Schema);
 module.exports.config = {
-  dbName: "updatelists",
-  displayName: "updatelists",
+  dbName: "update-list",
+  displayName: "Update List",
 };
