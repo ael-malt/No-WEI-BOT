@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const UL_Schema = new mongoose.Schema({
-  title: String,
+  text: String,
   messageId: String,
 });
 module.exports = mongoose.model("update-list", UL_Schema);
