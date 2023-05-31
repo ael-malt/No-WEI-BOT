@@ -4,7 +4,6 @@ const UL_Schema = require("../schemas/update-list-schema");
 const mongoose = require('mongoose');
 module.exports = async (instance, client) => {
 	mongoose.connect(process.env.MONGO_URI);
-	// const UL_Schema = mongoose.model('update-list', new mongoose.Schema({ name: String }));
 	
 	const targetChannel = client.channels.cache.get("1113464078619394078"); //Channel Id
 	const notion = new Client({
@@ -19,7 +18,6 @@ module.exports = async (instance, client) => {
 		  page_size: 50,
 		});
 		const listEmbed = new Discord.EmbedBuilder();
-		// console.log(response.results[2].to_do);
 		let i = 0;
 		j = 0;
 		let listContent = '';
@@ -100,14 +98,14 @@ module.exports = async (instance, client) => {
 	setTimeout(function () {
 		notionProjectNotif();
 		start();
-	}, 304000);
+	}, 1000 * 60 * 5);
 	}
 	start();
 };
 
 module.exports.config = {
-	dbName: "notion-contributors",
-	displayName: "Notion Contributors",
+	dbName: "update-list",
+	displayName: "Update List",
 };
 async function getEntry() {
 	return (await UL_Schema.find({}));
